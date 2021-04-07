@@ -9,6 +9,5 @@ public enum Direction {
             case UP -> 1;
             case DOWN -> -1;
         };
-
     }
 }
