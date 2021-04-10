@@ -1,4 +1,4 @@
-package ElevatorSystem;
+package ElevatorSystem.SystemManager;
 
 public class Elevator {
     private final int id;

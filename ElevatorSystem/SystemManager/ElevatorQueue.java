@@ -1,4 +1,4 @@
-package ElevatorSystem;
+package ElevatorSystem.SystemManager;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
