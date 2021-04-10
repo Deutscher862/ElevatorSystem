@@ -10,4 +10,11 @@ public enum Direction {
             case DOWN -> -1;
         };
     }
+
+    public Direction getOpposite(){
+        return switch (this) {
+            case UP -> Direction.DOWN;
+            case DOWN -> Direction.UP;
+        };
+    }
 }
