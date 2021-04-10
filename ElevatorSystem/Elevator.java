@@ -35,10 +35,10 @@ public class Elevator {
             }
             else{
                 if(downTarget != -1){
+                    this.direction = Direction.DOWN;
                     this.targetFloor = downTarget;
                     this.downQueue.removeFloor(downTarget);
                 }
-
             }
         }
         else{
@@ -48,6 +48,7 @@ public class Elevator {
             }
             else{
                 if(upTarget != -1){
+                    this.direction = Direction.UP;
                     this.targetFloor = upTarget;
                     this.upQueue.removeFloor(upTarget);
                 }
