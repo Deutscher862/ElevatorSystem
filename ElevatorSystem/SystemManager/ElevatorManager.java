@@ -15,22 +15,22 @@ public class ElevatorManager {
     private final Stage stage;
     private final int numberOfFloors;
 
-    ElevatorManager(Stage stage, int numberOfElevators, int numberOfFloors){
+    ElevatorManager(Stage stage, int numberOfElevators, int numberOfFloors) {
         this.elevatorArrayList = new ArrayList<>();
         this.stage = stage;
         this.numberOfFloors = numberOfFloors;
-        for(int i = 0; i < numberOfElevators; i++){
+        for (int i = 0; i < numberOfElevators; i++) {
             Elevator el = new Elevator(i, numberOfFloors);
             this.elevatorArrayList.add(el);
         }
-        this.vizualizer = new Vizualizer(stage,this, numberOfElevators, numberOfFloors);
+        this.vizualizer = new Vizualizer(stage, this, numberOfElevators, numberOfFloors);
 
         stage.setTitle("ElevatorSim");
         stage.setScene(new Scene(vizualizer.getRoot(), 1000, 800));
         stage.show();
     }
 
-    public void run(){
+    public void run() {
         new Thread(() -> {
             while (!this.ended) {
                 doStep();
@@ -45,32 +45,31 @@ public class ElevatorManager {
         }).start();
     }
 
-    public Object[] getElevatorsStatus(int id){
+    public Object[] getElevatorsStatus(int id) {
         return this.elevatorArrayList.get(id).getStatus();
     }
 
-    public Elevator getElevatorAtId(int id){
+    public Elevator getElevatorAtId(int id) {
         return this.elevatorArrayList.get(id);
     }
 
-    public void doStep(){
-        for(Elevator elevator : this.elevatorArrayList){
+    public void doStep() {
+        for (Elevator elevator : this.elevatorArrayList) {
             Vector2D oldPosition = elevator.move();
 
-            if(oldPosition != null){
+            if (oldPosition != null) {
                 this.vizualizer.updateTile(oldPosition, elevator);
             }
         }
     }
 
-    public void addPickup(Direction direction){
+    public void addPickup(Direction direction) {
         Vector2D position = this.vizualizer.getSelectedTilePosition();
-        if(position != null){
+        if (position != null) {
             this.elevatorArrayList.get(position.x).pickUp(this.numberOfFloors - position.y - 1, direction);
             this.vizualizer.setPickupNotification(direction.toString() + " pickup for:\n" +
-                   position.x + " elevator\nat " + position.y + " floor\nadded successfully!");
-        }
-        else{
+                    position.x + " elevator\nat " + position.y + " floor\nadded successfully!");
+        } else {
             this.vizualizer.setPickupNotification("No tile selected");
         }
     }

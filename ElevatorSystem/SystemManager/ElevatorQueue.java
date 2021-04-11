@@ -10,7 +10,7 @@ public class ElevatorQueue {
     private final Direction direction;
     private static int numberOfFloors;
 
-    ElevatorQueue(int numberOfFloors, Direction direction){
+    ElevatorQueue(int numberOfFloors, Direction direction) {
         ElevatorQueue.numberOfFloors = numberOfFloors;
         this.currentFloor = 0;
         this.direction = direction;
@@ -48,40 +48,39 @@ public class ElevatorQueue {
         this.currentFloor = currentFloor;
     }
 
-    public void reserveFloor(int floor){
-        if(floor >= 0 && floor < ElevatorQueue.numberOfFloors)
-        {
-            if(this.direction == Direction.UP){
-                if(floor < currentFloor)
+    public void reserveFloor(int floor) {
+        if (floor >= 0 && floor < ElevatorQueue.numberOfFloors) {
+            if (this.direction == Direction.UP) {
+                if (floor < currentFloor)
                     this.reservedBeforeCurrentFloor.add(floor);
                 else this.reservedAfterCurrentFloor.add(floor);
-            }
-            else{
-                if(floor < currentFloor)
+            } else {
+                if (floor < currentFloor)
                     this.reservedAfterCurrentFloor.add(floor);
                 else this.reservedBeforeCurrentFloor.add(floor);
             }
         }
     }
 
-    public int getNextFloor(){
-        if(!this.reservedAfterCurrentFloor.isEmpty())
+    public int getNextFloor() {
+        if (!this.reservedAfterCurrentFloor.isEmpty())
             return this.reservedAfterCurrentFloor.peek();
-        else{
+        else {
             this.reservedAfterCurrentFloor.addAll(this.reservedBeforeCurrentFloor);
             this.reservedBeforeCurrentFloor.clear();
             return -1;
         }
     }
 
-    public void removeFloor(){
+    public void removeFloor() {
         this.reservedAfterCurrentFloor.poll();
     }
 
-    static class NoDuplicates<E> extends PriorityQueue<E> {
-        public NoDuplicates(Comparator<E> integerComparator) {
+    static class NoDuplicates<Integer> extends PriorityQueue<Integer> {
+        public NoDuplicates(Comparator<Integer> integerComparator) {
         }
-        public boolean add(E e) {
+
+        public boolean add(Integer e) {
             boolean isAdded = false;
             if (!super.contains(e)) {
                 isAdded = super.add(e);
