@@ -25,8 +25,8 @@ public class Vizualizer {
             for(int j = 0; j < numberOfFloors; j++){
                 Vector2D position = new Vector2D(i, j);
                 if(j == numberOfFloors-1)
-                    this.grid[i][j] = new Tile(20, position, Color.YELLOW, this, this.manager.getElevatorAtId(i));
-                else this.grid[i][j] = new Tile(20, position, Color.WHITE, this, null);
+                    this.grid[i][j] = new Tile(20, position, this, this.manager.getElevatorAtId(i));
+                else this.grid[i][j] = new Tile(20, position, this, null);
                 this.root.getChildren().add(this.grid[i][j]);
             }
         }
@@ -42,6 +42,11 @@ public class Vizualizer {
 
     public Pane getRoot() {
         return root;
+    }
+
+    public void updateTile(Vector2D oldPosition, Elevator elevator){
+        this.grid[oldPosition.x][oldPosition.y].setElevator(null);
+        this.grid[elevator.getId()][elevator.getCurrentFloor()].setElevator(elevator);
     }
 
     public void elevatorSelected(Elevator elevator, Vector2D position) {

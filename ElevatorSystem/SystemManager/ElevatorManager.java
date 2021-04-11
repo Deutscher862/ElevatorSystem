@@ -1,10 +1,12 @@
 package ElevatorSystem.SystemManager;
 
+import ElevatorSystem.Vizualizer.Vector2D;
 import ElevatorSystem.Vizualizer.Vizualizer;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.nio.file.attribute.PosixFileAttributes;
 import java.util.ArrayList;
 
 public class ElevatorManager {
@@ -36,7 +38,10 @@ public class ElevatorManager {
 
     public void doStep(){
         for(Elevator elevator : this.elevatorArrayList){
-            elevator.move();
+            Vector2D oldPosition = elevator.move();
+            if(oldPosition != null){
+                this.vizualizer.updateTile(oldPosition, elevator);
+            }
         }
     }
 }

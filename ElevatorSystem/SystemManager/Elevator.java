@@ -1,5 +1,7 @@
 package ElevatorSystem.SystemManager;
 
+import ElevatorSystem.Vizualizer.Vector2D;
+
 public class Elevator {
     private final int id;
     private static int numberOfFloors;
@@ -60,12 +62,23 @@ public class Elevator {
         return new Object[]{this.id, this.currentFloor, this.direction};
     }
 
-    public void move(){
+    public int getId() {
+        return id;
+    }
+
+    public int getCurrentFloor() {
+        return currentFloor;
+    }
+
+    public Vector2D move(){
         if(this.currentFloor != this.targetFloor){
+            Vector2D oldPosition = new Vector2D(this.id, this.currentFloor);
             this.setCurrentFloor(this.currentFloor + this.direction.toInt());
+            return oldPosition;
         }
         else{
             findTargetLevel();
+            return null;
         }
     }
 
