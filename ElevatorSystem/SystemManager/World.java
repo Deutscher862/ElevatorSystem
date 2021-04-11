@@ -16,6 +16,6 @@ public class World extends Application{
             System.out.println(each);
         }
         */
-        ElevatorManager manager = new ElevatorManager(1, 10);
+        ElevatorManager manager = new ElevatorManager(stage,16, 10);
     }
 }

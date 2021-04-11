@@ -19,18 +19,15 @@ public class ElevatorManager {
             Elevator el = new Elevator(i, numberOfFloors);
             this.elevatorArrayList.add(el);
         }
-        this.vizualizer = new Vizualizer(this, numberOfElevators, numberOfFloors);
+        this.vizualizer = new Vizualizer(stage,this, numberOfElevators, numberOfFloors);
 
         stage.setTitle("ElevatorSim");
         stage.setScene(new Scene(vizualizer.getRoot(), 1000, 800, Color.BLACK));
         stage.show();
     }
 
-    //Object[]
-    public void  getElevatorsStatus(){
-        for(Elevator elevator : this.elevatorArrayList){
-            elevator.getStatus();
-        }
+    public Object[] getElevatorsStatus(int id){
+        return this.elevatorArrayList.get(id).getStatus();
     }
 
     public Elevator getElevatorAtId(int id){
