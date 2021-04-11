@@ -10,4 +10,12 @@ public enum Direction {
             case DOWN -> -1;
         };
     }
+
+    @Override
+    public String toString() {
+        return switch (this) {
+            case UP -> "UP";
+            case DOWN -> "DOWN";
+        };
+    }
 }

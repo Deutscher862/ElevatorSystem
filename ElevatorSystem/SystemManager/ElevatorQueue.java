@@ -1,6 +1,5 @@
 package ElevatorSystem.SystemManager;
 
-import javax.sound.midi.SysexMessage;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
@@ -77,16 +76,6 @@ public class ElevatorQueue {
 
     public void removeFloor(){
         this.reservedAfterCurrentFloor.poll();
-    }
-
-    @Override
-    public String toString() {
-        return "ElevatorQueue{" +
-                "currentFloor=" + currentFloor +
-                ", reservedBeforeCurrentFloor=" + reservedBeforeCurrentFloor +
-                ", reservedAfterCurrentFloor=" + reservedAfterCurrentFloor +
-                ", direction=" + direction +
-                '}';
     }
 
     static class NoDuplicates<E> extends PriorityQueue<E> {

@@ -16,7 +16,8 @@ public class World extends Application{
             System.out.println(each);
         }
         */
-        ElevatorManager manager = new ElevatorManager(stage,16, 10);
+        //max 16/18
+        ElevatorManager manager = new ElevatorManager(stage,16, 18);
         manager.run();
     }
 }

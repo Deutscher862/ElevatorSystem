@@ -1,13 +1,16 @@
 package ElevatorSystem.SystemManager;
 
+import ElevatorSystem.Vizualizer.Tile;
 import ElevatorSystem.Vizualizer.Vector2D;
 import ElevatorSystem.Vizualizer.Vizualizer;
 import javafx.scene.Scene;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class ElevatorManager {
     private final ArrayList<Elevator> elevatorArrayList;
@@ -24,7 +27,7 @@ public class ElevatorManager {
         this.vizualizer = new Vizualizer(stage,this, numberOfElevators, numberOfFloors);
 
         stage.setTitle("ElevatorSim");
-        stage.setScene(new Scene(vizualizer.getRoot(), 1000, 800, Color.BLACK));
+        stage.setScene(new Scene(vizualizer.getRoot(), 1000, 800));
         stage.show();
     }
 
@@ -52,5 +55,25 @@ public class ElevatorManager {
                 this.vizualizer.updateTile(oldPosition, elevator);
             }
         }
+    }
+
+    public void addPickup(Direction direction){
+        Vector2D position = this.vizualizer.getSelectedTilePosition();
+        if(position != null){
+            this.elevatorArrayList.get(position.x).pickUp(position.y, direction);
+            this.vizualizer.setPickupNotification(direction.toString() + " pickup for:\n" +
+                   position.x + " elevator\nat " + position.y + " floor\nadded successfully!");
+        }
+        else{
+            this.vizualizer.setPickupNotification("No tile selected");
+        }
+    }
+
+    public void addUpPickup() {
+        addPickup(Direction.UP);
+    }
+
+    public void addDownPickup() {
+        addPickup(Direction.DOWN);
     }
 }

@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class Tile extends StackPane {
-    //pojedyncza płytka reprezentująca pojedyncze pole na mapie
     private final int size;
     private final Rectangle rectangle;
     private final Vector2D position;
@@ -20,10 +19,14 @@ public class Tile extends StackPane {
         this.rectangle.setStroke(Color.BLACK);
         setColor();
         this.getChildren().add(rectangle);
-        this.setTranslateX(this.position.x * size + 10);
-        this.setTranslateY(this.position.y * size + 10);
+        this.setTranslateX(this.position.x * size + 40);
+        this.setTranslateY(this.position.y * size + 40);
 
-        setOnMouseClicked(event -> vizualizer.elevatorSelected(this.elevator, this.position));
+        setOnMouseClicked(event -> vizualizer.elevatorSelected(this, this.elevator, this.position));
+    }
+
+    public Vector2D getPosition() {
+        return position;
     }
 
     public void setColor() {
