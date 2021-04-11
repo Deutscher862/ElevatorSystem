@@ -15,7 +15,7 @@ public class Elevator {
         this.id = id;
         Elevator.numberOfFloors = numberOfFloors;
         this.currentFloor = 0;
-        this.targetFloor = 0;
+        this.targetFloor = -1;
         this.direction = Direction.UP;
 
         this.upQueue = new ElevatorQueue(numberOfFloors, Direction.UP);
@@ -27,35 +27,42 @@ public class Elevator {
             this.currentFloor = floor;
     }
 
-    public void findTargetLevel() {
-        int upTarget = this.upQueue.getNextFloor(this.currentFloor);
-        int downTarget = this.downQueue.getNextFloor(this.currentFloor);
-        if(this.direction == Direction.UP){
-            if(upTarget != -1){
-                this.targetFloor = upTarget;
-                this.upQueue.removeFloor(upTarget);
-            }
-            else{
-                if(downTarget != -1){
-                    this.direction = Direction.DOWN;
-                    this.targetFloor = downTarget;
-                    this.downQueue.removeFloor(downTarget);
-                }
-            }
+    private void findTargetLevelInDirection(int sameDirectionFloor, int oppositeDirectionFloor){
+        if(sameDirectionFloor != -1){
+            this.targetFloor = sameDirectionFloor;
+            this.upQueue.removeFloor();
         }
         else{
-            if(downTarget != -1){
-                this.targetFloor = downTarget;
-                this.downQueue.removeFloor(downTarget);
+            if(oppositeDirectionFloor != -1){
+                this.targetFloor = oppositeDirectionFloor;
+                this.downQueue.removeFloor();
             }
-            else{
-                if(upTarget != -1){
-                    this.direction = Direction.UP;
-                    this.targetFloor = upTarget;
-                    this.upQueue.removeFloor(upTarget);
-                }
-            }
+            else this.targetFloor = -1;
         }
+    }
+
+    private void findTargetLevel() {
+        if(this.targetFloor == this.currentFloor){
+            if(this.direction == Direction.UP){
+                this.upQueue.removeFloor();
+            }
+            else this.downQueue.removeFloor();
+        }
+
+        int upTarget = this.upQueue.getNextFloor();
+        int downTarget = this.downQueue.getNextFloor();
+        if(this.direction == Direction.UP){
+            findTargetLevelInDirection(upTarget, downTarget);
+        }
+        else{
+            findTargetLevelInDirection(downTarget, upTarget);
+        }
+        if(this.targetFloor == this.currentFloor)
+            findTargetLevel();
+
+        if(this.targetFloor > this.currentFloor)
+            this.direction = Direction.UP;
+        else this.direction = Direction.DOWN;
     }
 
     public Object[] getStatus(){
@@ -71,14 +78,19 @@ public class Elevator {
     }
 
     public Vector2D move(){
-        if(this.currentFloor != this.targetFloor){
+        if(this.currentFloor != this.targetFloor && this.targetFloor != -1){
             Vector2D oldPosition = new Vector2D(this.id, this.currentFloor);
             this.setCurrentFloor(this.currentFloor + this.direction.toInt());
+            this.upQueue.setCurrentFloor(this.currentFloor);
+            this.downQueue.setCurrentFloor(this.currentFloor);
             return oldPosition;
         }
         else{
             findTargetLevel();
-            return null;
+            if(this.targetFloor == -1){
+                return null;
+            }
+            else return move();
         }
     }
 

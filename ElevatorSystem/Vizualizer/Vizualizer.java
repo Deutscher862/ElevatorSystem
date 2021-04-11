@@ -14,27 +14,29 @@ public class Vizualizer {
     private final Pane root;
     private final ElevatorManager manager;
     private final Tile[][] grid;
+    private final int size;
     private final Text selectedElevator;
 
     public Vizualizer(Stage stage, ElevatorManager manager, int numberOfElevators, int numberOfFloors){
         this.root = new Pane();
         this.manager = manager;
+        this.size = numberOfFloors;
         this.grid = new Tile[numberOfElevators][numberOfFloors];
 
         for(int i = 0; i < numberOfElevators; i++){
             for(int j = 0; j < numberOfFloors; j++){
                 Vector2D position = new Vector2D(i, j);
                 if(j == numberOfFloors-1)
-                    this.grid[i][j] = new Tile(20, position, this, this.manager.getElevatorAtId(i));
-                else this.grid[i][j] = new Tile(20, position, this, null);
+                    this.grid[i][j] = new Tile(40, position, this, this.manager.getElevatorAtId(i));
+                else this.grid[i][j] = new Tile(40, position, this, null);
                 this.root.getChildren().add(this.grid[i][j]);
             }
         }
 
         this.selectedElevator = new Text();
         this.selectedElevator.setWrappingWidth(200);
-        this.selectedElevator.setTranslateX(820);
-        this.selectedElevator.setTranslateY((30));
+        this.selectedElevator.setTranslateX(600);
+        this.selectedElevator.setTranslateY((50));
         this.selectedElevator.setFill(Color.WHITE);
         this.selectedElevator.setFont(Font.font("Verdana", 15));
         this.root.getChildren().add(this.selectedElevator);
@@ -45,8 +47,9 @@ public class Vizualizer {
     }
 
     public void updateTile(Vector2D oldPosition, Elevator elevator){
-        this.grid[oldPosition.x][oldPosition.y].setElevator(null);
-        this.grid[elevator.getId()][elevator.getCurrentFloor()].setElevator(elevator);
+        System.out.println(oldPosition + " " + Arrays.toString(elevator.getStatus()));
+        this.grid[oldPosition.x][this.size - oldPosition.y - 1].setElevator(null);
+        this.grid[elevator.getId()][this.size - elevator.getCurrentFloor() - 1].setElevator(elevator);
     }
 
     public void elevatorSelected(Elevator elevator, Vector2D position) {

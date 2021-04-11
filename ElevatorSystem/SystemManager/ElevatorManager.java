@@ -6,8 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.nio.file.attribute.PosixFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ElevatorManager {
     private final ArrayList<Elevator> elevatorArrayList;
@@ -28,6 +28,14 @@ public class ElevatorManager {
         stage.show();
     }
 
+    public void run(){
+        Elevator e = this.elevatorArrayList.get(0);
+        System.out.println(Arrays.toString(e.getStatus()));
+        for(int i = 0; i < 20; i++)
+            doStep();
+        System.out.println(Arrays.toString(e.getStatus()));
+    }
+
     public Object[] getElevatorsStatus(int id){
         return this.elevatorArrayList.get(id).getStatus();
     }
@@ -39,6 +47,7 @@ public class ElevatorManager {
     public void doStep(){
         for(Elevator elevator : this.elevatorArrayList){
             Vector2D oldPosition = elevator.move();
+
             if(oldPosition != null){
                 this.vizualizer.updateTile(oldPosition, elevator);
             }

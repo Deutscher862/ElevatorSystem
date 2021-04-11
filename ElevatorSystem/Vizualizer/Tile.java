@@ -35,5 +35,6 @@ public class Tile extends StackPane {
 
     public void setElevator(Elevator elevator) {
         this.elevator = elevator;
+        setColor();
     }
 }

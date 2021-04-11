@@ -17,5 +17,6 @@ public class World extends Application{
         }
         */
         ElevatorManager manager = new ElevatorManager(stage,16, 10);
+        manager.run();
     }
 }

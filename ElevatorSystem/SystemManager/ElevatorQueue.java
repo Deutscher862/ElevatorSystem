@@ -1,17 +1,35 @@
 package ElevatorSystem.SystemManager;
 
+import javax.sound.midi.SysexMessage;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class ElevatorQueue {
-    private final PriorityQueue<Integer> reservedFloor;
+    private int currentFloor;
+    private final PriorityQueue<Integer> reservedBeforeCurrentFloor;
+    private final PriorityQueue<Integer> reservedAfterCurrentFloor;
     private final Direction direction;
     private static int numberOfFloors;
 
     ElevatorQueue(int numberOfFloors, Direction direction){
         ElevatorQueue.numberOfFloors = numberOfFloors;
+        this.currentFloor = 0;
         this.direction = direction;
-        this.reservedFloor = new NoDuplicates<>(
+        this.reservedBeforeCurrentFloor = new NoDuplicates<>(
+                (a, b) -> {
+                    if (a < b) {
+                        if (direction == Direction.UP)
+                            return -1;
+                        else return 1;
+                    }
+                    if (a > b) {
+                        if (direction == Direction.UP)
+                            return 1;
+                        else return -1;
+                    }
+                    return 0;
+                });
+        this.reservedAfterCurrentFloor = new NoDuplicates<>(
                 (a, b) -> {
                     if (a < b) {
                         if (direction == Direction.UP)
@@ -27,24 +45,48 @@ public class ElevatorQueue {
                 });
     }
 
+    public void setCurrentFloor(int currentFloor) {
+        this.currentFloor = currentFloor;
+    }
+
     public void reserveFloor(int floor){
         if(floor >= 0 && floor < ElevatorQueue.numberOfFloors)
-            this.reservedFloor.add(floor);
-    }
-
-    public int getNextFloor(int currentFloor){
-        if(!this.reservedFloor.isEmpty())
-            for(Integer el : this.reservedFloor){
-                if(this.direction == Direction.UP && el > currentFloor)
-                    return el;
-                else if(this.direction == Direction.DOWN && el < currentFloor)
-                    return el;
+        {
+            if(this.direction == Direction.UP){
+                if(floor < currentFloor)
+                    this.reservedBeforeCurrentFloor.add(floor);
+                else this.reservedAfterCurrentFloor.add(floor);
             }
-        return -1;
+            else{
+                if(floor < currentFloor)
+                    this.reservedAfterCurrentFloor.add(floor);
+                else this.reservedBeforeCurrentFloor.add(floor);
+            }
+        }
     }
 
-    public void removeFloor(int floor){
-        this.reservedFloor.remove(floor);
+    public int getNextFloor(){
+        if(!this.reservedAfterCurrentFloor.isEmpty())
+            return this.reservedAfterCurrentFloor.peek();
+        else{
+            this.reservedAfterCurrentFloor.addAll(this.reservedBeforeCurrentFloor);
+            this.reservedBeforeCurrentFloor.clear();
+            return -1;
+        }
+    }
+
+    public void removeFloor(){
+        this.reservedAfterCurrentFloor.poll();
+    }
+
+    @Override
+    public String toString() {
+        return "ElevatorQueue{" +
+                "currentFloor=" + currentFloor +
+                ", reservedBeforeCurrentFloor=" + reservedBeforeCurrentFloor +
+                ", reservedAfterCurrentFloor=" + reservedAfterCurrentFloor +
+                ", direction=" + direction +
+                '}';
     }
 
     static class NoDuplicates<E> extends PriorityQueue<E> {
