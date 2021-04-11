@@ -20,8 +20,6 @@ public class Vizualizer {
     private final int size;
     private final Text selectedElevator;
     private final Text pickupNotification;
-    private final Button addUpPickup;
-    private final Button addDownPickup;
     private Tile selectedTile;
 
     public Vizualizer(Stage stage, ElevatorManager manager, int numberOfElevators, int numberOfFloors){
@@ -58,20 +56,33 @@ public class Vizualizer {
         this.pickupNotification.setFont(Font.font("Verdana", 15));
         this.root.getChildren().add(this.pickupNotification);
 
-        this.addUpPickup = new Button("Add up Pickup");
-        this.addUpPickup.setTranslateX(850);
-        this.addUpPickup.setTranslateY(400);
-        this.addUpPickup.setMinSize(100, 50);
-        this.addUpPickup.setOnAction(event -> manager.addUpPickup());
+        Button addUpPickup = new Button("Add up Pickup");
+        addUpPickup.setTranslateX(850);
+        addUpPickup.setTranslateY(400);
+        addUpPickup.setMinSize(100, 50);
+        addUpPickup.setOnAction(event -> this.manager.addUpPickup());
         this.root.getChildren().add(addUpPickup);
 
-        this.addDownPickup = new Button("Add down Pickup");
-        this.addDownPickup.setTranslateX(700);
-        this.addDownPickup.setTranslateY(400);
-        this.addDownPickup.setMinSize(100, 50);
-        this.addDownPickup.setOnAction(event -> manager.addDownPickup());
+        Button addDownPickup = new Button("Add down Pickup");
+        addDownPickup.setTranslateX(700);
+        addDownPickup.setTranslateY(400);
+        addDownPickup.setMinSize(100, 50);
+        addDownPickup.setOnAction(event -> this.manager.addDownPickup());
         this.root.getChildren().add(addDownPickup);
 
+        Button startStopButton = new Button("Start/Stop");
+        startStopButton.setTranslateX(850);
+        startStopButton.setTranslateY(600);
+        startStopButton.setMinSize(100, 50);
+        startStopButton.setOnAction(event -> this.manager.pause());
+        this.root.getChildren().add(startStopButton);
+
+        Button exit = new Button("Exit");
+        exit.setTranslateX(700);
+        exit.setTranslateY(600);
+        exit.setMinSize(100, 50);
+        exit.setOnAction(event -> this.manager.exit());
+        this.root.getChildren().add(exit);
     }
 
     public Pane getRoot() {
@@ -89,17 +100,19 @@ public class Vizualizer {
     }
 
     public void updateTile(Vector2D oldPosition, Elevator elevator){
-        System.out.println(oldPosition + " " + Arrays.toString(elevator.getStatus()));
         this.grid[oldPosition.x][this.size - oldPosition.y - 1].setElevator(null);
         this.grid[elevator.getId()][this.size - elevator.getCurrentFloor() - 1].setElevator(elevator);
     }
 
-    public void elevatorSelected(Tile tile, Elevator elevator, Vector2D position) {
+    public void selectTile(Tile tile, Elevator elevator, Vector2D position) {
+        if(this.selectedTile != null)
+            this.selectedTile.setColor(Color.WHITE);
         this.selectedTile = tile;
+        this.selectedTile.setColor(Color.GRAY);
         if(elevator != null){
             Object[] status = this.manager.getElevatorsStatus(position.x);
             this.selectedElevator.setText("Selected elevator status: " + Arrays.toString(status));
         }
-        else this.selectedElevator.setText("None elevator selected");
+        else this.selectedElevator.setText("Tile selected: \nelevator number " +position.x + "\nfloor " + position.y);
     }
 }

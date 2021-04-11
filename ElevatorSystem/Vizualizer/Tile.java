@@ -17,27 +17,33 @@ public class Tile extends StackPane {
         this.elevator = elevator;
         this.rectangle = new Rectangle(size, size);
         this.rectangle.setStroke(Color.BLACK);
-        setColor();
+        setElevatorColor();
         this.getChildren().add(rectangle);
         this.setTranslateX(this.position.x * size + 40);
         this.setTranslateY(this.position.y * size + 40);
 
-        setOnMouseClicked(event -> vizualizer.elevatorSelected(this, this.elevator, this.position));
+        setOnMouseClicked(event -> vizualizer.selectTile(this, this.elevator, this.position));
     }
 
     public Vector2D getPosition() {
         return position;
     }
 
-    public void setColor() {
-        if(this.elevator != null)
+    public void setColor(Color color){
+        if(this.elevator != null && color == Color.WHITE)
             this.rectangle.setFill(Color.YELLOW);
+        else this.rectangle.setFill(color);
+    }
+
+    public void setElevatorColor() {
+        if(this.elevator != null)
+            setColor(Color.YELLOW);
         else
-            this.rectangle.setFill(Color.WHITE);
+            setColor(Color.WHITE);
     }
 
     public void setElevator(Elevator elevator) {
         this.elevator = elevator;
-        setColor();
+        setElevatorColor();
     }
 }

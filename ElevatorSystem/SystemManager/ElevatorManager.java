@@ -1,25 +1,24 @@
 package ElevatorSystem.SystemManager;
 
-import ElevatorSystem.Vizualizer.Tile;
 import ElevatorSystem.Vizualizer.Vector2D;
 import ElevatorSystem.Vizualizer.Vizualizer;
 import javafx.scene.Scene;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
 
 public class ElevatorManager {
     private final ArrayList<Elevator> elevatorArrayList;
     private final Vizualizer vizualizer;
-    //private final int numberOfFloors;
+    private boolean paused;
+    private boolean ended;
+    private final Stage stage;
+    private final int numberOfFloors;
 
     ElevatorManager(Stage stage, int numberOfElevators, int numberOfFloors){
         this.elevatorArrayList = new ArrayList<>();
-        //this.numberOfLevels = numberOfLevels;
+        this.stage = stage;
+        this.numberOfFloors = numberOfFloors;
         for(int i = 0; i < numberOfElevators; i++){
             Elevator el = new Elevator(i, numberOfFloors);
             this.elevatorArrayList.add(el);
@@ -32,11 +31,18 @@ public class ElevatorManager {
     }
 
     public void run(){
-        Elevator e = this.elevatorArrayList.get(0);
-        System.out.println(Arrays.toString(e.getStatus()));
-        for(int i = 0; i < 20; i++)
-            doStep();
-        System.out.println(Arrays.toString(e.getStatus()));
+        new Thread(() -> {
+            while (!this.ended) {
+                doStep();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                while (this.paused)
+                    Thread.onSpinWait();
+            }
+        }).start();
     }
 
     public Object[] getElevatorsStatus(int id){
@@ -60,7 +66,7 @@ public class ElevatorManager {
     public void addPickup(Direction direction){
         Vector2D position = this.vizualizer.getSelectedTilePosition();
         if(position != null){
-            this.elevatorArrayList.get(position.x).pickUp(position.y, direction);
+            this.elevatorArrayList.get(position.x).pickUp(this.numberOfFloors - position.y - 1, direction);
             this.vizualizer.setPickupNotification(direction.toString() + " pickup for:\n" +
                    position.x + " elevator\nat " + position.y + " floor\nadded successfully!");
         }
@@ -75,5 +81,14 @@ public class ElevatorManager {
 
     public void addDownPickup() {
         addPickup(Direction.DOWN);
+    }
+
+    public void pause() {
+        this.paused = !this.paused;
+    }
+
+    public void exit() {
+        this.stage.close();
+        this.ended = true;
     }
 }
