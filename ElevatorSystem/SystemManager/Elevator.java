@@ -2,6 +2,14 @@ package ElevatorSystem.SystemManager;
 
 import ElevatorSystem.Vizualizer.Vector2D;
 
+/*
+Each elevator object has its own id, currentFloor, current direction and the target floor the elevator tries to get to.
+Also, there are two ElevatorQueue objects representing the reserved floors in both directions. The description of that
+how they work is included in the ElevatorQueue class, but here is how the elevator uses them to set optimised target floor.
+
+Using two ElevatorQueue objects to set a target floor:
+
+ */
 public class Elevator {
     private final int id;
     private static int numberOfFloors;
@@ -17,7 +25,6 @@ public class Elevator {
         this.currentFloor = 0;
         this.targetFloor = -1;
         this.direction = Direction.UP;
-
         this.upQueue = new ElevatorQueue(numberOfFloors, Direction.UP);
         this.downQueue = new ElevatorQueue(numberOfFloors, Direction.DOWN);
     }
@@ -27,14 +34,16 @@ public class Elevator {
             this.currentFloor = floor;
     }
 
-    private void findTargetLevelInDirection(int sameDirectionFloor, int oppositeDirectionFloor) {
-        if (sameDirectionFloor != -1) {
-            this.targetFloor = sameDirectionFloor;
-            this.upQueue.removeFloor();
+    private void findTargetLevelInSelectedDirection(ElevatorQueue priorityDirectionQueue, ElevatorQueue oppositeDirectionQueue) {
+        int priorityFloor = priorityDirectionQueue.getNextFloor();
+        int secondaryFloor = oppositeDirectionQueue.getNextFloor();
+        if (priorityFloor != -1) {
+            this.targetFloor = priorityFloor;
+            priorityDirectionQueue.removeFloor();
         } else {
-            if (oppositeDirectionFloor != -1) {
-                this.targetFloor = oppositeDirectionFloor;
-                this.downQueue.removeFloor();
+            if (secondaryFloor != -1) {
+                this.targetFloor = secondaryFloor;
+                oppositeDirectionQueue.removeFloor();
             } else this.targetFloor = -1;
         }
     }
@@ -46,12 +55,10 @@ public class Elevator {
             } else this.downQueue.removeFloor();
         }
 
-        int upTarget = this.upQueue.getNextFloor();
-        int downTarget = this.downQueue.getNextFloor();
         if (this.direction == Direction.UP) {
-            findTargetLevelInDirection(upTarget, downTarget);
+            findTargetLevelInSelectedDirection(this.upQueue, this.downQueue);
         } else {
-            findTargetLevelInDirection(downTarget, upTarget);
+            findTargetLevelInSelectedDirection(this.downQueue, this.upQueue);
         }
         if (this.targetFloor == this.currentFloor)
             findTargetLevel();

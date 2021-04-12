@@ -5,6 +5,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+
+//each Tile represents single rectangle on the visualisation, has its own position and elevator
+//every tile can be selected by mouse clicking event, then it changes its color
 public class Tile extends StackPane {
     private final Rectangle rectangle;
     private final Vector2D position;
@@ -29,13 +32,13 @@ public class Tile extends StackPane {
 
     public void setColor(Color color) {
         if (this.elevator != null && color == Color.WHITE)
-            this.rectangle.setFill(Color.YELLOW);
+            this.rectangle.setFill(Color.GREEN);
         else this.rectangle.setFill(color);
     }
 
     public void setElevatorColor() {
         if (this.elevator != null)
-            setColor(Color.YELLOW);
+            setColor(Color.GREEN);
         else
             setColor(Color.WHITE);
     }

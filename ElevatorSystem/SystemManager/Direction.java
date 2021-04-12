@@ -1,5 +1,6 @@
 package ElevatorSystem.SystemManager;
 
+//simple enum that helps determining the direction of the elevator
 public enum Direction {
     UP,
     DOWN;

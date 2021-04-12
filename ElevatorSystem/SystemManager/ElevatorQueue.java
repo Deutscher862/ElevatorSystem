@@ -3,6 +3,19 @@ package ElevatorSystem.SystemManager;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
+/*
+ElevatorQueue is a class that has 2 priority queues which describe the request queue in a specific direction,
+before and after the current elevator floor. Each of queue has a comparator that ensures the correct positioning of
+the reserved floors. In addition, the internal class NoDuplicates provides the inability to add an already existing booking.
+
+Pickup system:
+If the elevator has already been on the floor requested to be visited in a specific direction, new request is added to
+the reservedBeforeCurrentFloor queue. Otherwise, if the elevator is the same direction the queue, but the reported floor
+has not yet been visited, reservation is added to the reservedAfterCurrentFloor queue. When the elevator has visited all
+the floors in the afterQueue and this queue is empty, it means that the next time it will go again from the beginning of
+that direction, so we can copy the queue of floors from the reservedBeforeCurrentFloor one to the reservedAfterCurrentFloor
+and clear the first one.
+ */
 public class ElevatorQueue {
     private int currentFloor;
     private final PriorityQueue<Integer> reservedBeforeCurrentFloor;
@@ -14,6 +27,7 @@ public class ElevatorQueue {
         ElevatorQueue.numberOfFloors = numberOfFloors;
         this.currentFloor = 0;
         this.direction = direction;
+        //creating queues with comparators
         this.reservedBeforeCurrentFloor = new NoDuplicates<>(
                 (a, b) -> {
                     if (a < b) {
@@ -62,6 +76,8 @@ public class ElevatorQueue {
         }
     }
 
+    //returns the next floor where the elevator is to come in the given direction
+    //if reservedAfterCurrentFloor queue is empty we copy from reservedBeforeCurrentFloor queue to it
     public int getNextFloor() {
         if (!this.reservedAfterCurrentFloor.isEmpty())
             return this.reservedAfterCurrentFloor.peek();
