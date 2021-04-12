@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
 ElevatorQueue is a class that has 2 priority queues which describe the request queue in a specific direction,
 before and after the current elevator floor. Each of queue has a comparator that ensures the correct positioning of
 the reserved floors. In addition, the internal class NoDuplicates provides the inability to add an already existing booking.
+Queues are ordered in ascending or descending order by floor, depending on the direction of the queue.
 
 Pickup system:
 If the elevator has already been on the floor requested to be visited in a specific direction, new request is added to

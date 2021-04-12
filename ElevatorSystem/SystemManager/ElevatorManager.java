@@ -83,7 +83,7 @@ public class ElevatorManager {
 
     public void setRefreshTime(int refreshTime) {
         int newTime = this.refreshTime + refreshTime;
-        if(newTime >= 100 && newTime <= 1000)
+        if (newTime >= 100 && newTime <= 1000)
             this.refreshTime = newTime;
     }
 

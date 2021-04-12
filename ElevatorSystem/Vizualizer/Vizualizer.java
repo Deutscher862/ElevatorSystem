@@ -23,7 +23,7 @@ public class Vizualizer {
     private final Text pickupNotification;
     private Tile selectedTile;
 
-    public Vizualizer(ElevatorManager manager, int numberOfElevators, int numberOfFloors){
+    public Vizualizer(ElevatorManager manager, int numberOfElevators, int numberOfFloors) {
         this.root = new Pane();
         this.root.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
         this.manager = manager;
@@ -35,7 +35,7 @@ public class Vizualizer {
         Creating grid that contains tiles with elevators and floors.
         Each row is a floor, and each column is a elevator shaft
          */
-        for(int i = 0; i < numberOfElevators; i++) {
+        for (int i = 0; i < numberOfElevators; i++) {
             for (int j = 0; j < numberOfFloors; j++) {
                 Vector2D position = new Vector2D(i, j);
                 if (j == numberOfFloors - 1)
@@ -115,30 +115,30 @@ public class Vizualizer {
     }
 
     public Vector2D getSelectedTilePosition() {
-        if(selectedTile != null)
+        if (selectedTile != null)
             return selectedTile.getPosition();
         else return null;
     }
 
-    public void setPickupNotification(String text){
+    public void setPickupNotification(String text) {
         this.pickupNotification.setText(text);
     }
 
     //update tile elevator attribute
-    public void updateTile(Vector2D oldPosition, Elevator elevator){
+    public void updateTile(Vector2D oldPosition, Elevator elevator) {
         this.grid[oldPosition.x][this.size - oldPosition.y - 1].setElevator(null);
         this.grid[elevator.getId()][this.size - elevator.getCurrentFloor() - 1].setElevator(elevator);
     }
 
     public void selectTile(Tile tile, Elevator elevator, Vector2D position) {
-        if(this.selectedTile != null)
+        if (this.selectedTile != null)
             this.selectedTile.setColor(Color.WHITE);
         this.selectedTile = tile;
         this.selectedTile.setColor(Color.GRAY);
-        if(elevator != null){
+        if (elevator != null) {
             Object[] status = this.manager.getElevatorsStatus(position.x);
             this.selectedElevator.setText("Selected elevator status: " + Arrays.toString(status));
-        }
-        else this.selectedElevator.setText("Tile selected: \nelevator number " +position.x + "\nfloor " + position.y);
+        } else
+            this.selectedElevator.setText("Tile selected: \nelevator number " + position.x + "\nfloor " + position.y);
     }
 }
