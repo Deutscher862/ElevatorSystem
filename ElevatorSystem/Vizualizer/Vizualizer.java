@@ -139,6 +139,6 @@ public class Vizualizer {
             Object[] status = this.manager.getElevatorsStatus(position.x);
             this.selectedElevator.setText("Selected elevator status: " + Arrays.toString(status));
         } else
-            this.selectedElevator.setText("Tile selected: \nelevator number " + position.x + "\nfloor " + position.y);
+            this.selectedElevator.setText("Tile selected: \nelevator number " + position.x + "\nfloor " + (this.size-position.y-1));
     }
 }
