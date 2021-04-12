@@ -75,7 +75,7 @@ public class ElevatorManager {
         if (position != null) {
             this.elevatorArrayList.get(position.x).pickUp(this.numberOfFloors - position.y - 1, direction);
             this.vizualizer.setPickupNotification(direction.toString() + " pickup for:\n" +
-                    position.x + " elevator\nat " + position.y + " floor\nadded successfully!");
+                    position.x + " elevator\nat " + (this.numberOfFloors - position.y - 1) + " floor\nadded successfully!");
         } else {
             this.vizualizer.setPickupNotification("No tile selected");
         }
