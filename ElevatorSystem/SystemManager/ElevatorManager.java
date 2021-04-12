@@ -102,5 +102,6 @@ public class ElevatorManager {
     public void exit() {
         this.stage.close();
         this.ended = true;
+        System.exit(0);
     }
 }
